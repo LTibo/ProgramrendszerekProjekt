@@ -3,9 +3,40 @@ Ha a require után fix útvonalat adunk meg, akkor keresni kezdi a gépünkön a
 kezdi keresni a megadott nevű modult, aztán a globálisan telepített függőségek között, végül a beépített modulok között. Ha az
 importálni kívánt modul tartalmaz futtatható kódot is, az ilyenkor automatikusan lefut, ezáltal használható például arra is, hogy
 bootstrap scripteket indítsunk a szerver indítása során. */
-const express = require('express')
+const express = require('express');
+// #2: a külső modulok importjait érdemes a fájlok elejére csoportosítani
+const mongoose = require('mongoose');
 // Ezzel a paranccsal hozunk létre egy ExpressJS szerverappot, melyet paraméterezünk, ellátunk middleware-ekkel, majd elindítjuk
-const app = express()
+const app = express();
+
+// #2 még mielőtt bármit csinálnánk a szerverünkkel, első lépésben rácsatlakozunk az adatbázisra
+mongoose.connect('mongodb://localhost:27017/mydatabase', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true, //ezek a paraméterek azért kellenek, hogy kompatibilisek legyünk akár régebbi Mongo verziókkal is
+});
+
+// #2 callback funkciók, amelyek az app.js indítását követően egyértelműen jelzik, hogy sikeres vagy sikertelen volt-e a db kapcsolódás
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.once('open', function () {
+  console.log('Connected to MongoDB successfully!');
+});
+
+// #2 importálom és regisztrálom a sémámat a mongodb 'user' kollekciójához
+require('./db/userSchema');
+
+// #2 a boostrapperről tudom, hogy egy függvényt exportál, itt rögtön a hivatkozás helyén meg is hívom azt
+require('./db/bootstrapper')();
+
+/* #2 A cookie-parser és a body-parser teszik lehetővé, hogy a kliens által küldött HTTP kérésből kiolvasásra
+ kerüljenek a feltöltött adatok - az előző órai módszerrel ugyanis csak az url-be ágyazott paramétereket tudtuk
+ kiolvasni, a sütiket és a request body-t, amiben általában jönnek majd az adatok, nem. */
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+
 
 // Az app.use() metódusban található függvény egy middleware, amely fut, amikor az alkalmazáshoz érkezik egy HTTP kérés.
 // A middleware-ek mindig az app.use-ok sorrendjének megfelelően futnak le, így végezhetünk majd a beérkező HTTP kérésen előfeldolgozást vagy autentikációt
