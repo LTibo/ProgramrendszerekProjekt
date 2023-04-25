@@ -24,6 +24,7 @@ async function getUser(req, res, next) {
   next();
 }
 
+
 // GET /users - összes felhasználó lekérdezése
 router.get('/', async (req, res) => {
   try {
@@ -39,6 +40,8 @@ router.get('/:id', getUser, (req, res) => { //ez is egy middleware használati m
   // a getUser middleware ilyenkor le fog futni a kérés feldolgozása előtt 
   res.json(res.user); //egyszerűsített válaszküldés, a megadott objektumot json-re konvertálva küldjük el
 });
+
+
 
 // POST /users - új felhasználó létrehozása
 router.post('/', async (req, res) => {

@@ -9,6 +9,10 @@ const mongoose = require('mongoose');
 // Ezzel a paranccsal hozunk létre egy ExpressJS szerverappot, melyet paraméterezünk, ellátunk middleware-ekkel, majd elindítjuk
 const app = express();
 
+const cors = require('cors');
+
+app.use(cors());
+
 // #2 még mielőtt bármit csinálnánk a szerverünkkel, első lépésben rácsatlakozunk az adatbázisra
 mongoose.connect('mongodb://localhost:27017/mydatabase', {
   useNewUrlParser: true,
