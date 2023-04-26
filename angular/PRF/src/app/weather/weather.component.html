@@ -8,11 +8,15 @@
     />
     <button type="submit">Get Weather</button>
   </form>
-  <div *ngIf="weatherData" class="weather-data">
-    <h2>{{ weatherData.name }}</h2>
-    <p>{{ weatherData.weather[0].description }}</p>
-    <p class="temperature"><i class="fas fa-{{ icon }}"></i> {{ (weatherData.main.temp - 273.15).toFixed(2) }} &deg;C</p>
-    <p><i class="fas fa-tint"></i> {{ weatherData.main.humidity }}%</p>
-    <p><i class="fas fa-wind"></i> {{ weatherData.wind.speed }} m/s</p>
+  <div class="weather-data-container">
+    <div class="weather-data-card" *ngFor="let data of weatherDataArray; let i = index;">
+      <button class="close-button" (click)="removeWeatherData(i)">X</button>
+      <h2>{{ weatherData.name }}</h2>
+  <p>{{ weatherData.weather[0].description }}</p>
+  <p class="temperature"><i class="fas fa-{{ icon }}"></i> {{ (weatherData.main.temp - 273.15).toFixed(2) }} &deg;C</p>
+  <p><i class="fas fa-tint"></i> {{ weatherData.main.humidity }}%</p>
+  <p><i class="fas fa-wind"></i> {{ weatherData.wind.speed }} m/s</p>
+    </div>
   </div>
 </div>
+
