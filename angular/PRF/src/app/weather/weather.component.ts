@@ -8,6 +8,7 @@ import { WeatherService } from '../utils/weather.service';
 })
 export class WeatherComponent implements OnInit {
   city = '';
+  icon = '';
   weatherData: any;
 
   constructor(private weatherService: WeatherService) { }
@@ -16,9 +17,24 @@ export class WeatherComponent implements OnInit {
   }
 
   getWeather() {
-    this.weatherService.getWeather(this.city).subscribe((data) => {
+    this.weatherService.getWeather(this.city).subscribe({
+      next: (data) => {
       this.weatherData = data;
+      this.setIcon();
       console.log(this.weatherData);
-    });
+    },
+      error: (e) => {console.log(e)}}
+  )}
+
+  setIcon() {
+    const temp = this.weatherData.main.temp - 273.15;
+    if (temp < 10) {
+      this.icon = 'snowflake';
+    } else if (temp >= 10 && temp < 20) {
+      this.icon = 'cloud-sun';
+    } else {
+      this.icon = 'sun';
+    }
   }
+
 }
