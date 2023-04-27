@@ -1,21 +1,15 @@
-<div class="content" role="main">
+<div class="auth-container">
+  <button class="back-btn" routerLink="/">Back</button>
   <h2>Register</h2>
-  <form (ngSubmit)="onSubmit()">
-    <div>
-      <label for="username">Username:</label>
-      <input type="text" id="username" name="username" [(ngModel)]="user.username">
-    </div>
-
-    <div>
+  <form>
+    <div class="form-group">
       <label for="email">Email:</label>
-      <input type="email" id="email" name="email" [(ngModel)]="user.email">
+      <input type="email" id="email" />
     </div>
-
-    <div>
+    <div class="form-group">
       <label for="password">Password:</label>
-      <input type="password" id="password" name="password" [(ngModel)]="user.password">
+      <input type="password" id="password" />
     </div>
-
     <button type="submit">Register</button>
   </form>
 </div>

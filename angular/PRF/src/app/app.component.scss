@@ -9,4 +9,26 @@
   h1 {
     margin: 0;
   }
+
+  nav {
+    display: flex;
+    gap: 1rem;
+    margin-left: auto;
+  }
+
+  .nav-btn {
+    background-color: transparent;
+    border: 1px solid white;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+
+    &:hover {
+      background-color: white;
+      color: #007bff;
+    }
+  }
 }
