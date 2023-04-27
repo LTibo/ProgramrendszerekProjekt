@@ -1,31 +1,19 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
-// #2 User sémadefiníció, minden dokumentumnak, amit a MongoDB-ben tárolni akarunk, kell egy séma definíció
 const userSchema = new mongoose.Schema({
-    // a séma legfontosabb elemei az eltárolt dokumentumok adattagjai
-  username: {
-    type: String,
-    /* támogatott típusok: String, Number, Date, Buffer, Boolean, Mixed, ObjectId,
-        Array, Decimal128, Map, Schema - az utolsóval valósítható meg az egymásba ágyazás, tehát hogy az egyik dokumentum
-        egy másikat tartalmazzon */
-    required: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  accessLevel: {
-    type: Number,
-    required: true,
-    default: 1, //adhatunk alapértelmezett értéket is
-  },
-  birthdate: {
-    type: Date,
-    required: true,
-  },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  accessLevel: { type: Number, required: true, default: 1},
 });
 
-// User modell
+userSchema.pre('save', async function (next) {
+  if (this.isModified('password')) {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
+  next();
+});
+
 const User = mongoose.model('user', userSchema);
 
 module.exports = User;

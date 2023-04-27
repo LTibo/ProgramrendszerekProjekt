@@ -7,20 +7,19 @@ async function ensureAdminExists() {
     // Ellenőrizzük, van-e már admin felhasználó az adatbázisban
     const admin = await User.findOne({ accessLevel: 3 }); //a findOne-nal jelezzük, hogy pontosan egy darab usert keresünk
     if (admin) { //ha kaptunk vissza objektumot, akkor ez a feltétel igazra teljesül, ha üres/undefine, akkor hamisra
-      console.log('Az admin felhasználó már megtalálható az adatbázisban!');
+      console.log('Admin user found');
     } else {
       // Ha nincs, akkor létrehozunk egy újat
       const newAdmin = new User({
-        username: 'admin',
+        email: 'admin@adminmail.com',
         password: 'admin123',
         accessLevel: 3,
-        birthdate: new Date(),
       });
       await newAdmin.save();
-      console.log('Az admin felhasználó sikeresen létrehozva!');
+      console.log('Admin user created');
     }
   } catch (error) {
-    console.error('Hiba történt az admin ellenőrzése vagy létrehozása során: ', error);
+    console.error('Error while creating admin: ', error);
   }
 }
 
