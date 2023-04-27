@@ -1,0 +1,16 @@
+<div class="container">
+  <div class="header">
+    <button class="back-btn" routerLink="/">Back</button>
+    <h1>5-Day Weather Forecast for {{ city }}</h1>
+  </div>
+  <div class="forecast-container" *ngIf="forecastData">
+    <ng-container *ngFor="let data of forecastData.list; let i = index">
+      <div class="forecast-card" *ngIf="i % 8 === 0">
+        <h3>{{ data.dt_txt | date: 'shortDate' }}</h3>
+        <img [src]="'http://openweathermap.org/img/wn/' + data.weather[0].icon + '@2x.png'" alt="Weather icon" />
+        <p>Temperature: {{ data.main.temp }}°C</p>
+        <p>Weather: {{ data.weather[0].description }}</p>
+      </div>
+    </ng-container>
+  </div>
+</div>

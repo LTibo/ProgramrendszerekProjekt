@@ -5,13 +5,12 @@ import { SecondComponent } from './second/second.component';
 import { ErrorComponent } from './error/error.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { WeatherComponent } from './weather/weather.component';
+import { ForecastComponent } from './forecast/forecast.component';
 
 const routes: Routes = [
-  {path: '', redirectTo: 'first', pathMatch: 'full'},
-  {path: 'first', component: FirstComponent},
-  {path: 'registration', component: RegistrationComponent},
+  {path: '', redirectTo: 'weather', pathMatch: 'full'},
   {path: 'weather', component: WeatherComponent},
-  {path: 'second/:id', component: SecondComponent},
+  { path: 'forecast/:city', component: ForecastComponent },
   {path: '**', component: ErrorComponent}
 ];
 

@@ -1,22 +1,20 @@
-<div class="content" role="main">
-  <form (ngSubmit)="getWeather()">
-    <input
-      type="text"
-      [(ngModel)]="city"
-      name="city"
-      placeholder="Enter city name"
-    />
-    <button type="submit">Get Weather</button>
-  </form>
-  <div class="weather-data-container">
-    <div class="weather-data-card" *ngFor="let data of weatherDataArray; let i = index;">
-      <button class="close-button" (click)="removeWeatherData(i)">X</button>
-      <h2>{{ weatherData.name }}</h2>
-  <p>{{ weatherData.weather[0].description }}</p>
-  <p class="temperature"><i class="fas fa-{{ icon }}"></i> {{ (weatherData.main.temp - 273.15).toFixed(2) }} &deg;C</p>
-  <p><i class="fas fa-tint"></i> {{ weatherData.main.humidity }}%</p>
-  <p><i class="fas fa-wind"></i> {{ weatherData.wind.speed }} m/s</p>
-    </div>
+<div class="container">
+  <h1>Weather Forecast</h1>
+  <div class="input-group">
+    <input [(ngModel)]="city" placeholder="Enter city name" class="form-control" />
+    <button (click)="getWeather()" class="btn btn-primary">Get Weather</button>
+  </div>
+  <div class="card-container">
+    <ng-container *ngFor="let data of weatherData; let i = index">
+      <div class="card">
+        <button class="close-btn" (click)="removeCity(i)">&times;</button>
+        <a [routerLink]="['/forecast', data.name]">
+          <h2>{{ data.name }}, {{ data.sys.country }}</h2>
+          <img [src]="'http://openweathermap.org/img/wn/' + data.weather[0].icon + '@2x.png'" alt="Weather icon" />
+          <p>Temperature: {{ data.main.temp }}°C</p>
+          <p>Weather: {{ data.weather[0].description }}</p>
+        </a>
+      </div>
+    </ng-container>
   </div>
 </div>
-

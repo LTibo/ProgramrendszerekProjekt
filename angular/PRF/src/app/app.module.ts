@@ -10,6 +10,9 @@ import { ErrorComponent } from './error/error.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { FormsModule } from '@angular/forms';
 import { WeatherComponent } from './weather/weather.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ForecastComponent } from './forecast/forecast.component';
+import { LoginComponent } from './login/login.component';
 
 
 @NgModule({
@@ -19,13 +22,16 @@ import { WeatherComponent } from './weather/weather.component';
     SecondComponent,
     ErrorComponent,
     RegistrationComponent,
-    WeatherComponent
+    WeatherComponent,
+    ForecastComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule
   ],
   providers: [HttpClientModule],
   bootstrap: [AppComponent]
