@@ -8,6 +8,7 @@
     </span>
     <span *ngIf="userEmail">
       {{ userEmail }}
+      <button *ngIf="accessLevel === 3" mat-button routerLink="/admin">Admin</button>
       <button mat-button (click)="onLogout()" class="nav-btn">Logout</button>
     </span>
   </nav>

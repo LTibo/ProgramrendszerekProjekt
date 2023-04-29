@@ -20,6 +20,6 @@ export class RegistrationComponent implements OnInit {
 
   onSubmit() {
     const { email, password } = this.registerForm.value;
-    this.authService.login(email, password);
+    this.authService.register(email, password);
   }
 }

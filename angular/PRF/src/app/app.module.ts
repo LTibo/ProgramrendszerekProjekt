@@ -15,6 +15,7 @@ import { ForecastComponent } from './forecast/forecast.component';
 import { LoginComponent } from './login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { AdminComponent } from './admin/admin.component';
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     WeatherComponent,
     ForecastComponent,
     LoginComponent,
+    AdminComponent,
   ],
   imports: [
     BrowserModule,

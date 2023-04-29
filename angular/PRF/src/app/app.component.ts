@@ -8,10 +8,15 @@ import { AuthService } from './utils/auth.service';
 })
 export class AppComponent implements OnInit {
   userEmail: string | null = null;
+  accessLevel: number | null = null;
 
   constructor(public authService: AuthService) {
     authService.user$.subscribe((email) => {
       this.userEmail = email;
+    });
+
+    authService.accessLevel$.subscribe((level) => {
+      this.accessLevel = level;
     });
   }
 

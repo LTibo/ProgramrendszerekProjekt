@@ -11,6 +11,9 @@ export class AuthService {
   private userSubject = new BehaviorSubject<string | null>(null);
   user$ = this.userSubject.asObservable();
 
+  private accessLevelSubject = new BehaviorSubject<number | null>(null);
+  accessLevel$ = this.accessLevelSubject.asObservable();
+
   constructor(private http: HttpClient, private router: Router, private snackBar: MatSnackBar) {
     const storedEmail = localStorage.getItem('userEmail');
     if (storedEmail) {
@@ -23,6 +26,7 @@ export class AuthService {
       next: (response: any) => {
         this.userSubject.next(email);
         localStorage.setItem('userEmail', email);
+        this.accessLevelSubject.next(response.accessLevel);
         this.router.navigate(['/']);
         this.snackBar.open(response.message, 'Close', { duration: 3000 });
       },
@@ -38,6 +42,7 @@ export class AuthService {
       next: (response: any) => {
         this.userSubject.next(email);
         localStorage.setItem('userEmail', email);
+        this.accessLevelSubject.next(response.accessLevel);
         this.router.navigate(['/']);
         this.snackBar.open(response.message, 'Close', { duration: 3000 });
       },
