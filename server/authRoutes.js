@@ -63,22 +63,26 @@ router.post("/logout", (req, res) => {
 });
 
 
-router.get('/users', async (req, res) => {
-  if (req.session.user && req.session.accessLevel === 3) {
+router.post('/users', async (req, res) => {
+  try{
+  const user = await User.findOne({"email" : req.body.user});
+  if (req.body.user && user.accessLevel === 3) {
+    console.log("user: "+req.body.user,"accessLevel_: "+user.accessLevel)
     const users = await User.find({});
     res.json(users);
   } else {
     res.status(403).json({ message: 'Forbidden' });
+  }} catch(error){
+    res.status(500).json({ message: "Invalid user error." });
   }
 });
 
-router.delete('/users/:userId', async (req, res) => {
-  // Check if the user is logged in and has access level 3
-  if (req.session.user && req.session.accessLevel === 3) {
+router.delete('/userdel/:userId', async (req, res) => {
+  try{
     await User.findByIdAndDelete(req.params.userId);
     res.json({ message: 'User deleted' });
-  } else {
-    res.status(403).json({ message: 'Forbidden' });
+  } catch(error){
+    res.status(500).json({ message: "Invalid user error." });
   }
 });
 
