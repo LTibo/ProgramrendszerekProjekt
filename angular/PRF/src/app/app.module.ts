@@ -14,6 +14,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ForecastComponent } from './forecast/forecast.component';
 import { LoginComponent } from './login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -25,7 +26,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     RegistrationComponent,
     WeatherComponent,
     ForecastComponent,
-    LoginComponent
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -33,9 +34,10 @@ import { ReactiveFormsModule } from '@angular/forms';
     HttpClientModule,
     FormsModule,
     BrowserAnimationsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSnackBarModule,
   ],
-  providers: [HttpClientModule],
+  providers: [HttpClientModule, MatSnackBarModule],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
