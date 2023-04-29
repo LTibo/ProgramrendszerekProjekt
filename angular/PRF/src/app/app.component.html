@@ -2,8 +2,14 @@
 <header class="weather-toolbar">
   <h1>Weather App</h1>
   <nav>
-    <button class="nav-btn" routerLink="/login">Login</button>
-    <button class="nav-btn" routerLink="/register">Register</button>
+    <span *ngIf="!userEmail">
+      <button mat-button routerLink="/login" class="nav-btn">Login</button>
+      <button mat-button routerLink="/register" class="nav-btn">Register</button>
+    </span>
+    <span *ngIf="userEmail">
+      {{ userEmail }}
+      <button mat-button (click)="onLogout()" class="nav-btn">Logout</button>
+    </span>
   </nav>
 </header>
 

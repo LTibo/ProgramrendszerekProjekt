@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
 import { FormGroup, FormControl } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from '../utils/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -15,23 +13,12 @@ export class LoginComponent implements OnInit {
     password: new FormControl(''),
   });
 
-  constructor(private http: HttpClient, private router: Router, private snackBar: MatSnackBar) {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit(): void {}
 
   onSubmit() {
     const { email, password } = this.loginForm.value;
-    this.http
-      .post('http://localhost:3000/auth/login', { email, password })
-      .subscribe(
-        (response:any) => {
-          this.router.navigate(['/']);
-          this.snackBar.open(response.message, 'Close', { duration: 3000 });
-        },
-        (error) => {
-          console.log('Error logging in:', error);
-          this.snackBar.open(error.error.message, 'Close', { duration: 3000 });
-        }
-      );
+    this.authService.login(email, password);
   }
 }

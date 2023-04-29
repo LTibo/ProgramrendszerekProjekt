@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from '../utils/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -15,24 +13,13 @@ export class RegistrationComponent implements OnInit {
     password: new FormControl('')
   });
 
-  constructor(private http: HttpClient, private router: Router, private snackBar: MatSnackBar) { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
   }
 
   onSubmit() {
     const { email, password } = this.registerForm.value;
-    this.http
-      .post('http://localhost:3000/auth/register', { email, password })
-      .subscribe(
-        (response: any) => {
-          this.router.navigate(['/']);
-          this.snackBar.open(response.message, 'Close', { duration: 3000 });
-        },
-        (error) => {
-          console.log('Error registering:', error);
-          this.snackBar.open(error.error.message, 'Close', { duration: 3000 });
-        }
-      );
+    this.authService.login(email, password);
   }
 }
