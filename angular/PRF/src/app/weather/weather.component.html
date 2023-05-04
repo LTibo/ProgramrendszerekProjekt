@@ -7,7 +7,7 @@
   <div class="card-container">
     <ng-container *ngFor="let data of weatherData; let i = index">
       <div class="card">
-        <button class="close-btn" (click)="removeCity(i)">&times;</button>
+        <button class="close-btn" (click)="removeCity(i, data.name)">&times;</button>
         <a [routerLink]="['/forecast', data.name]">
           <h2>{{ data.name }}, {{ data.sys.country }}</h2>
           <img [src]="'http://openweathermap.org/img/wn/' + data.weather[0].icon + '@2x.png'" alt="Weather icon" />

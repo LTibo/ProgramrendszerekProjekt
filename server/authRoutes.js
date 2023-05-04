@@ -49,7 +49,7 @@ router.post("/login", async (req, res) => {
     res
       .cookie("token", token, { httpOnly: true, maxAge: 60 * 60 * 1000 })
       .status(200)
-      .json({ message: "Logged in successfully.", accessLevel: user.accessLevel });
+      .json({ message: "Logged in successfully.", accessLevel: user.accessLevel, cities: user.cities, });
   } catch (error) {
     res.status(500).json({ message: "Error logging in." });
   }
@@ -83,6 +83,16 @@ router.delete('/userdel/:userId', async (req, res) => {
     res.json({ message: 'User deleted' });
   } catch(error){
     res.status(500).json({ message: "Invalid user error." });
+  }
+});
+
+router.post('/update-cities', async (req, res) => {
+  const { email, cities } = req.body;
+  try {
+    await User.updateOne({ email }, { $set: { cities } });
+    res.json({ success: true, message: 'Cities updated successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to update cities' });
   }
 });
 

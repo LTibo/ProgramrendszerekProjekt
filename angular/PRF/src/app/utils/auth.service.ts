@@ -14,7 +14,14 @@ export class AuthService {
   private accessLevelSubject = new BehaviorSubject<number | null>(null);
   accessLevel$ = this.accessLevelSubject.asObservable();
 
-  constructor(private http: HttpClient, private router: Router, private snackBar: MatSnackBar) {
+  private citiesSubject = new BehaviorSubject<[] | null>(null);
+  cities$ = this.citiesSubject.asObservable();
+
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private snackBar: MatSnackBar
+  ) {
     const storedEmail = localStorage.getItem('userEmail');
     if (storedEmail) {
       this.userSubject.next(storedEmail);
@@ -22,35 +29,40 @@ export class AuthService {
   }
 
   login(email: any, password: any) {
-    return this.http.post('http://localhost:3000/auth/login', { email, password }).subscribe({
-      next: (response: any) => {
-        this.userSubject.next(email);
-        localStorage.setItem('userEmail', email);
-        this.accessLevelSubject.next(response.accessLevel);
-        this.router.navigate(['/']);
-        this.snackBar.open(response.message, 'Close', { duration: 3000 });
-      },
-      error: (error) => {
-        console.log('Error logging in:', error);
-        this.snackBar.open(error.error.message, 'Close', { duration: 3000 });
-      }
-  });
+    return this.http
+      .post('http://localhost:3000/auth/login', { email, password })
+      .subscribe({
+        next: (response: any) => {
+          this.userSubject.next(email);
+          localStorage.setItem('userEmail', email);
+          this.accessLevelSubject.next(response.accessLevel);
+          this.citiesSubject.next(response.cities);
+          this.router.navigate(['/']);
+          this.snackBar.open(response.message, 'Close', { duration: 3000 });
+        },
+        error: (error) => {
+          console.log('Error logging in:', error);
+          this.snackBar.open(error.error.message, 'Close', { duration: 3000 });
+        },
+      });
   }
 
   register(email: any, password: any) {
-    return this.http.post('http://localhost:3000/auth/register', { email, password }).subscribe({
-      next: (response: any) => {
-        this.userSubject.next(email);
-        localStorage.setItem('userEmail', email);
-        this.accessLevelSubject.next(response.accessLevel);
-        this.router.navigate(['/']);
-        this.snackBar.open(response.message, 'Close', { duration: 3000 });
-      },
-      error: (error) => {
-        console.log('Error registering:', error);
-        this.snackBar.open(error.error.message, 'Close', { duration: 3000 });
-      }
-  });
+    return this.http
+      .post('http://localhost:3000/auth/register', { email, password })
+      .subscribe({
+        next: (response: any) => {
+          this.userSubject.next(email);
+          localStorage.setItem('userEmail', email);
+          this.accessLevelSubject.next(response.accessLevel);
+          this.router.navigate(['/']);
+          this.snackBar.open(response.message, 'Close', { duration: 3000 });
+        },
+        error: (error) => {
+          console.log('Error registering:', error);
+          this.snackBar.open(error.error.message, 'Close', { duration: 3000 });
+        },
+      });
   }
 
   logout() {
@@ -64,7 +76,25 @@ export class AuthService {
       error: (error) => {
         console.log('Error logging out:', error);
         this.snackBar.open(error.error.message, 'Close', { duration: 3000 });
-      }
-  });
+      },
+    });
   }
+
+  updateCities(cities: string[] |null |undefined) {
+    const userEmail = localStorage.getItem('userEmail');
+    if (!userEmail) {
+      return;
+    }
+    this.http
+    .post('http://localhost:3000/auth/update-cities', { email: userEmail, cities })
+    .subscribe({
+      next: (response: any) => {
+        this.snackBar.open(response.message, 'Close', { duration: 3000 });
+      },
+      error: (error) => {
+        this.snackBar.open(error.error.message, 'Close', { duration: 3000 });
+      },
+    });
+  }
+
 }
