@@ -12,7 +12,7 @@
     <tr *ngFor="let user of users">
       <td>{{ user.email }}</td>
       <td>{{ user.accessLevel }}</td>
-      <td><button (click)="deleteUser(user._id)">Delete</button></td>
+      <td *ngIf="user.accessLevel!=3"><button (click)="deleteUser(user._id)">Delete</button></td>
     </tr>
   </tbody>
 </table>

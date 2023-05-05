@@ -8,6 +8,7 @@ import { WeatherComponent } from './weather/weather.component';
 import { ForecastComponent } from './forecast/forecast.component';
 import { LoginComponent } from './login/login.component';
 import { AdminComponent } from './admin/admin.component';
+import { FavoritesComponent } from './favorites/favorites.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'weather', pathMatch: 'full'},
@@ -15,7 +16,9 @@ const routes: Routes = [
   { path: 'forecast/:city', component: ForecastComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegistrationComponent },
+  { path: 'favorites', component: FavoritesComponent },
   { path: 'admin', component: AdminComponent },
+
   {path: '**', component: ErrorComponent}
 ];
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, empty } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -55,6 +55,7 @@ export class AuthService {
           this.userSubject.next(email);
           localStorage.setItem('userEmail', email);
           this.accessLevelSubject.next(response.accessLevel);
+          this.citiesSubject.next(response.cities);
           this.router.navigate(['/']);
           this.snackBar.open(response.message, 'Close', { duration: 3000 });
         },

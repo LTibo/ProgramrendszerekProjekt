@@ -16,6 +16,7 @@ import { LoginComponent } from './login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { AdminComponent } from './admin/admin.component';
+import { FavoritesComponent } from './favorites/favorites.component';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import { AdminComponent } from './admin/admin.component';
     ForecastComponent,
     LoginComponent,
     AdminComponent,
+    FavoritesComponent,
   ],
   imports: [
     BrowserModule,

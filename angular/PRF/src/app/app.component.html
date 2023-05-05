@@ -1,6 +1,6 @@
 <!-- Toolbar -->
 <header class="weather-toolbar">
-  <h1>Weather App</h1>
+  <h1>Weather Dashboard</h1>
   <nav>
     <span *ngIf="!userEmail">
       <button mat-button routerLink="/login" class="nav-btn">Login</button>
@@ -8,6 +8,7 @@
     </span>
     <span *ngIf="userEmail">
       {{ userEmail }}
+      <button routerLink="/favorites" class="nav-btn">Favorites</button>
       <button *ngIf="accessLevel === 3" mat-button routerLink="/admin" class="nav-btn">Admin</button>
       <button mat-button (click)="onLogout()" class="nav-btn">Logout</button>
     </span>

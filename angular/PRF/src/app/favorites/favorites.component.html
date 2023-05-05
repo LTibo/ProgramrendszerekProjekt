@@ -1,0 +1,17 @@
+<button class="back-btn" routerLink="/">Back</button>
+<h2>Users' Favorite Cities</h2>
+<div *ngFor="let city of favoriteCities">
+  {{ city.cityName }} - Added by: {{ city.userEmail }}
+</div>
+
+<h3>Add a new favorite city</h3>
+<input [(ngModel)]="newCityName" placeholder="Enter city name" />
+<button (click)="addFavorite(newCityName)">Add to Favorites</button>
+
+<h3>Your Favorite Cities</h3>
+<div *ngFor="let city of favoriteCities">
+  <ng-container *ngIf="city.userEmail === userEmail">
+    {{ city.cityName }}
+    <button (click)="removeFavorite(city.cityName)">Remove</button>
+  </ng-container>
+</div>

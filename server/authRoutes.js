@@ -2,6 +2,7 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("./db/userSchema");
+const FavoriteCity = require("./db/favCitySchema")
 
 const router = express.Router();
 
@@ -18,7 +19,7 @@ router.post("/register", async (req, res) => {
     const newUser = new User({ email, password });
     await newUser.save();
 
-    res.status(201).json({ message: "User registered successfully." });
+    res.status(201).json({ message: "User registered successfully.", accessLevel: newUser.accessLevel, cities: newUser.cities, });
   } catch (error) {
     res.status(500).json({ message: "Error registering user." });
   }
@@ -93,6 +94,71 @@ router.post('/update-cities', async (req, res) => {
     res.json({ success: true, message: 'Cities updated successfully' });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Failed to update cities' });
+  }
+});
+
+router.get('/getfavorites', async (req, res) => {
+
+  try {
+    const favoriteCities = await FavoriteCity.find({});
+    res.json({ success: true, favoriteCities });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to fetch favorite cities' });
+  }
+});
+
+router.post('/addfavorites', async (req, res) => {
+  const { userEmail, cityName } = req.body;
+
+  try {
+    const favoriteCity = new FavoriteCity({ userEmail, cityName });
+    await favoriteCity.save();
+    res.json({ success: true, message: 'Favorite city added successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to add favorite city' });
+  }
+});
+
+router.delete('/delfavorites', async (req, res) => {
+  const { userEmail, cityName } = req.body;
+
+  try {
+    await FavoriteCity.deleteOne({ userEmail, cityName });
+    res.json({ success: true, message: 'Favorite city removed successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to remove favorite city' });
+  }
+});
+
+router.app.get('/favorites', async (req, res) => {
+  try {
+    const favoriteCities = await FavoriteCity.find();
+    res.json({ success: true, favoriteCities });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to fetch favorite cities' });
+  }
+});
+
+router.post('/addfavorites', async (req, res) => {
+  const { userEmail, cityName } = req.body;
+
+  try {
+    const favoriteCity = new FavoriteCity({ userEmail, cityName });
+    await favoriteCity.save();
+    res.json({ success: true, message: 'Favorite city added successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to add favorite city' });
+  }
+});
+
+app.delete('/delfavorites', async (req, res) => {
+  const { userEmail, cityName } = req.body;
+
+  try {
+    await FavoriteCity.deleteOne({ userEmail, cityName });
+    res.json({ success: true, message: 'Favorite city removed successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to remove favorite city' });
   }
 });
 
