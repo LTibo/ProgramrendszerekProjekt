@@ -36,6 +36,7 @@ export class AuthService {
           this.userSubject.next(email);
           localStorage.setItem('userEmail', email);
           this.accessLevelSubject.next(response.accessLevel);
+          localStorage.setItem("accessLevel",response.accessLevel);
           this.citiesSubject.next(response.cities);
           this.router.navigate(['/']);
           this.snackBar.open(response.message, 'Close', { duration: 3000 });
@@ -55,6 +56,7 @@ export class AuthService {
           this.userSubject.next(email);
           localStorage.setItem('userEmail', email);
           this.accessLevelSubject.next(response.accessLevel);
+          localStorage.setItem("accessLevel",response.accessLevel);
           this.citiesSubject.next(response.cities);
           this.router.navigate(['/']);
           this.snackBar.open(response.message, 'Close', { duration: 3000 });
