@@ -23,22 +23,17 @@ passport.use(
   new localStrategy(
     { usernameField: "email", passwordField: "password" },
     function (email, password, done) {
-      console.log("asd", email, password);
       User.findOne({ email })
         .then((user) => {
           if (!user) {
             return done(null, false);
           }
-
           // if (
           // !
           user.comparePasswords(password, function (error, isMatch) {
-            console.log(error, isMatch);
             // Felhasználó által megadott jelszó ellenőrzése
             if (error) return done(error, false);
-            // Hiba kezelése, ha nem sikerült összehasonlítani a jelszavakat
             if (!isMatch) return done("Hibas jelszo", false, { message: "Hibas jelszo" });
-            // Sikeres belépés esetén felhasználó visszaadása
             return done(null, user);
           });
           // ) {
@@ -62,12 +57,10 @@ passport.use(
 );
 
 passport.serializeUser(function (user, done) {
-  console.log(user)
   done(null, user.email);
 });
 
 passport.deserializeUser(function (email, done) {
-  console.log(email)
   User.findOne({ email })
     .then((user) => done(null, user))
     .catch((err) => done(err, null));

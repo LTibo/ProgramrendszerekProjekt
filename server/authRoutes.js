@@ -33,9 +33,7 @@ router.post("/register", async (req, res) => {
 router
   .route("/login")
   .post(passport.authenticate("local"), async function (req, res) {
-    console.log(res);
     const user = await User.findOne({ email: req.body.email });
-    console.log(user);
     res
       .status(200)
       .json({
@@ -45,30 +43,6 @@ router
       });
   });
 
-router.route("/loginn").post((req, res, next) => {
-  //console.log(req.body.email, req.body.password);
-  if ((req.body.email, req.body.password)) {
-    // Felhasználónév és jelszó ellenőrzése
-    passport.authenticate("local", function (error, user) {
-      //meghívjuk a local nevű stratégiát
-      console.log(user);
-
-      if (error) return res.status(500).send(error);
-      // Hibakezelés
-      req.login(user, function (error) {
-        if (error) return res.status(500).send(error);
-        // Sikeres belépés esetén felhasználó beléptetése
-        return res.status(200).send("Bejelentkezes sikeres");
-      });
-    })(req, res); //a stratégiának átadjuk paraméterként a req, res objektumokat
-  } else {
-    // Hibakezelés, ha hiányzik a felhasználónév vagy a jelszó
-    return res
-      .status(400)
-      .send("Hibas keres, username es password kell")
-      .json();
-  }
-});
 
 router.post("/logout", (req, res) => {
   res

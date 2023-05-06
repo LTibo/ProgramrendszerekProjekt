@@ -1,12 +1,11 @@
 const mongoose = require('mongoose');
-// #2 mivel már regisztráltuk, a sémánkat le tudjuk kérni a mongoose-on keresztül is a megfelelő kollekcióra történő hivatkozással
 const User = mongoose.model('user');
+const Favorit = mongoose.model('FavoriteCity')
 
 async function ensureAdminExists() {
   try {
-    // Ellenőrizzük, van-e már admin felhasználó az adatbázisban
-    const admin = await User.findOne({ accessLevel: 3 }); //a findOne-nal jelezzük, hogy pontosan egy darab usert keresünk
-    if (admin) { //ha kaptunk vissza objektumot, akkor ez a feltétel igazra teljesül, ha üres/undefine, akkor hamisra
+    const admin = await User.findOne({ accessLevel: 3 }); 
+    if (admin) { 
       console.log('Admin user found');
     } else {
       // Ha nincs, akkor létrehozunk egy újat
@@ -15,12 +14,52 @@ async function ensureAdminExists() {
         password: 'admin123',
         accessLevel: 3,
       });
+      const newUser1 = new User({
+        email: 'asd@asd.com',
+        password: 'asd',
+        accessLevel: 1,
+      });
+      const newUser2 = new User({
+        email: 'asd2@asd.com',
+        password: 'asd',
+        accessLevel: 1,
+      });
       await newAdmin.save();
-      console.log('Admin user created');
+      await newUser1.save();
+      await newUser2.save();
+      console.log('Admin user and test users created');
     }
   } catch (error) {
     console.error('Error while creating admin: ', error);
   }
 }
 
-module.exports = ensureAdminExists;
+async function ensureFavExists() {
+  try {
+    const fav = await Favorit.findOne({}); 
+    if (fav) { 
+      console.log('Fav found');
+    } else {
+      const newFav1 = new Favorit({
+        userEmail: 'asd@asd.com',
+        cityName: 'Szeged',
+      });
+      const newFav2 = new Favorit({
+        userEmail: 'admin@adminmail.com',
+        cityName: 'Kecskemét',
+      });
+      const newUser3 = new Favorit({
+        userEmail: 'asd2@asd.com',
+        cityName: 'Budapest',
+      });
+      await newFav1.save();
+      await newFav2.save();
+      await newUser3.save();
+      console.log('Fav created');
+    }
+  } catch (error) {
+    console.error('Error while creating fav: ', error);
+  }
+}
+
+module.exports = ensureFavExists, ensureAdminExists;
