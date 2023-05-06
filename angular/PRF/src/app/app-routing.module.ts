@@ -10,6 +10,7 @@ import { LoginComponent } from './login/login.component';
 import { AdminComponent } from './admin/admin.component';
 import { FavoritesComponent } from './favorites/favorites.component';
 import { AuthGuard } from './auth.guard';
+import { FavGuard } from './fav.guard';
 
 const routes: Routes = [
   {path: '', redirectTo: 'weather', pathMatch: 'full'},
@@ -17,7 +18,7 @@ const routes: Routes = [
   { path: 'forecast/:city', component: ForecastComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegistrationComponent },
-  { path: 'favorites', component: FavoritesComponent },
+  { path: 'favorites', component: FavoritesComponent, canActivate: [FavGuard] },
   { path: 'admin', component: AdminComponent,  canActivate: [AuthGuard] },
 
   {path: '**', component: ErrorComponent}
