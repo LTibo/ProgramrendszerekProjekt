@@ -2,7 +2,8 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("./db/userSchema");
-const FavoriteCity = require("./db/favCitySchema")
+const FavoriteCity = require("./db/favCitySchema");
+const passport = require("passport");
 
 const router = express.Router();
 
@@ -19,146 +20,175 @@ router.post("/register", async (req, res) => {
     const newUser = new User({ email, password });
     await newUser.save();
 
-    res.status(201).json({ message: "User registered successfully.", accessLevel: newUser.accessLevel, cities: newUser.cities, });
+    res.status(201).json({
+      message: "User registered successfully.",
+      accessLevel: newUser.accessLevel,
+      cities: newUser.cities,
+    });
   } catch (error) {
     res.status(500).json({ message: "Error registering user." });
   }
 });
 
-router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      console.log(email);
-      return res.status(400).json({ message: "Invalid email or password." });
-    }
-
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-
-    if (!isPasswordValid) {
-      console.log(user.password);
-      return res.status(400).json({ message: "Invalid email or password." });
-    }
-
-    const token = jwt.sign({ id: user._id }, "super-secret-key", {
-      expiresIn: "1h",
-    });
-
+router
+  .route("/login")
+  .post(passport.authenticate("local"), async function (req, res) {
+    console.log(res);
+    const user = await User.findOne({ email: req.body.email });
+    console.log(user);
     res
-      .cookie("token", token, { httpOnly: true, maxAge: 60 * 60 * 1000 })
       .status(200)
-      .json({ message: "Logged in successfully.", accessLevel: user.accessLevel, cities: user.cities, });
-  } catch (error) {
-    res.status(500).json({ message: "Error logging in." });
+      .json({
+        message: "Yeee",
+        accessLevel: user.accessLevel,
+        cities: user.cities,
+      });
+  });
+
+router.route("/loginn").post((req, res, next) => {
+  //console.log(req.body.email, req.body.password);
+  if ((req.body.email, req.body.password)) {
+    // Felhasználónév és jelszó ellenőrzése
+    passport.authenticate("local", function (error, user) {
+      //meghívjuk a local nevű stratégiát
+      console.log(user);
+
+      if (error) return res.status(500).send(error);
+      // Hibakezelés
+      req.login(user, function (error) {
+        if (error) return res.status(500).send(error);
+        // Sikeres belépés esetén felhasználó beléptetése
+        return res.status(200).send("Bejelentkezes sikeres");
+      });
+    })(req, res); //a stratégiának átadjuk paraméterként a req, res objektumokat
+  } else {
+    // Hibakezelés, ha hiányzik a felhasználónév vagy a jelszó
+    return res
+      .status(400)
+      .send("Hibas keres, username es password kell")
+      .json();
   }
 });
 
 router.post("/logout", (req, res) => {
   res
-    .clearCookie("token")
+    .clearCookie("connect.sid")
     .status(200)
     .json({ message: "Logged out successfully." });
 });
 
-
-router.post('/users', async (req, res) => {
-  try{
-  const user = await User.findOne({"email" : req.body.user});
-  if (req.body.user && user.accessLevel === 3) {
-    console.log("user: "+req.body.user,"accessLevel_: "+user.accessLevel)
-    const users = await User.find({});
-    res.json(users);
-  } else {
-    res.status(403).json({ message: 'Forbidden' });
-  }} catch(error){
+router.post("/users", async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.body.user });
+    if (req.body.user && user.accessLevel === 3) {
+      console.log(
+        "user: " + req.body.user,
+        "accessLevel_: " + user.accessLevel
+      );
+      const users = await User.find({});
+      res.json(users);
+    } else {
+      res.status(403).json({ message: "Forbidden" });
+    }
+  } catch (error) {
     res.status(500).json({ message: "Invalid user error." });
   }
 });
 
-router.delete('/userdel/:userId', async (req, res) => {
-  try{
+router.delete("/userdel/:userId", async (req, res) => {
+  try {
     await User.findByIdAndDelete(req.params.userId);
-    res.json({ message: 'User deleted' });
-  } catch(error){
+    res.json({ message: "User deleted" });
+  } catch (error) {
     res.status(500).json({ message: "Invalid user error." });
   }
 });
 
-router.post('/update-cities', async (req, res) => {
+router.post("/update-cities", async (req, res) => {
   const { email, cities } = req.body;
   try {
     await User.updateOne({ email }, { $set: { cities } });
-    res.json({ success: true, message: 'Cities updated successfully' });
+    res.json({ success: true, message: "Cities updated successfully" });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Failed to update cities' });
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to update cities" });
   }
 });
 
-router.get('/getfavorites', async (req, res) => {
-
+router.get("/getfavorites", async (req, res) => {
   try {
     const favoriteCities = await FavoriteCity.find({});
     res.json({ success: true, favoriteCities });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Failed to fetch favorite cities' });
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to fetch favorite cities" });
   }
 });
 
-router.post('/addfavorites', async (req, res) => {
+router.post("/addfavorites", async (req, res) => {
   const { userEmail, cityName } = req.body;
 
   try {
     const favoriteCity = new FavoriteCity({ userEmail, cityName });
     await favoriteCity.save();
-    res.json({ success: true, message: 'Favorite city added successfully' });
+    res.json({ success: true, message: "Favorite city added successfully" });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Failed to add favorite city' });
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to add favorite city" });
   }
 });
 
-router.delete('/delfavorites', async (req, res) => {
+router.delete("/delfavorites", async (req, res) => {
   const { userEmail, cityName } = req.body;
 
   try {
     await FavoriteCity.deleteOne({ userEmail, cityName });
-    res.json({ success: true, message: 'Favorite city removed successfully' });
+    res.json({ success: true, message: "Favorite city removed successfully" });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Failed to remove favorite city' });
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to remove favorite city" });
   }
 });
 
-router.app.get('/favorites', async (req, res) => {
+router.get("/favorites", async (req, res) => {
   try {
     const favoriteCities = await FavoriteCity.find();
     res.json({ success: true, favoriteCities });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Failed to fetch favorite cities' });
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to fetch favorite cities" });
   }
 });
 
-router.post('/addfavorites', async (req, res) => {
+router.post("/addfavorites", async (req, res) => {
   const { userEmail, cityName } = req.body;
 
   try {
     const favoriteCity = new FavoriteCity({ userEmail, cityName });
     await favoriteCity.save();
-    res.json({ success: true, message: 'Favorite city added successfully' });
+    res.json({ success: true, message: "Favorite city added successfully" });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Failed to add favorite city' });
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to add favorite city" });
   }
 });
 
-app.delete('/delfavorites', async (req, res) => {
+router.delete("/delfavorites", async (req, res) => {
   const { userEmail, cityName } = req.body;
 
   try {
     await FavoriteCity.deleteOne({ userEmail, cityName });
-    res.json({ success: true, message: 'Favorite city removed successfully' });
+    res.json({ success: true, message: "Favorite city removed successfully" });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Failed to remove favorite city' });
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to remove favorite city" });
   }
 });
 

@@ -4,6 +4,8 @@ import { BehaviorSubject, empty } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+const ERROR_REGEX = /(?<=<pre>)(.*?)(?=<\/pre>)/
+
 @Injectable({
   providedIn: 'root',
 })
@@ -42,8 +44,10 @@ export class AuthService {
           this.snackBar.open(response.message, 'Close', { duration: 3000 });
         },
         error: (error) => {
-          console.log('Error logging in:', error);
-          this.snackBar.open(error.error.message, 'Close', { duration: 3000 });
+          const [errorMsg] = (error.error as string).match(ERROR_REGEX) ?? ["Unknown error"]
+          // console.log('Error logging in:',matchResult)
+
+          this.snackBar.open(errorMsg, 'Close', { duration: 3000 });
         },
       });
   }
