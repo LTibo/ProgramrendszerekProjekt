@@ -4,8 +4,6 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { FirstComponent } from './first/first.component';
-import { SecondComponent } from './second/second.component';
 import { ErrorComponent } from './error/error.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { FormsModule } from '@angular/forms';
@@ -22,8 +20,6 @@ import { FavoritesComponent } from './favorites/favorites.component';
 @NgModule({
   declarations: [
     AppComponent,
-    FirstComponent,
-    SecondComponent,
     ErrorComponent,
     RegistrationComponent,
     WeatherComponent,
