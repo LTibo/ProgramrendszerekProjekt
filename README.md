@@ -46,7 +46,7 @@ A "Register" gombbal új felhasználót is létrehozhatunk, de ezek alap, nem ad
 - Az alkalmazás kapcsolódik egy mongodb instance-hoz
 - Az alkalmazás képes bootstrappelni, vagyis MongoDB-t alap userekkel feltölteni (user és FavoriteCity sémákat is)
 - A szerver megvalósít legalább két modellt, melyek sémája egyértelműen definiált (user és FavoriteCity)
-- Adott legalább két olyan adatbázis hook, amelyek a modellek mentése vagy lekérése közben futnak le (jelszó mentésénél titkosítás)
+- Adott legalább két olyan adatbázis hook, amelyek a modellek mentése vagy lekérése közben futnak le (jelszó mentésénél titkosítás, userSchema.js)
 - A szerver megvalósít egy lokális autentikációs stratégiát  (passportjs segítségével)
 - A szerver kezeli a login sessiont (szintén passportjs)
 - A szerver rendelkezik a két kezelt modell CRUD interfészeivel, illetve egy login, logout, register route-tal  (a két Mongo sémára, authRoutes.js)
