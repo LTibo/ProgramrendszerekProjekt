@@ -1,0 +1,25 @@
+version: "3.3"
+services:
+  prf-frontend:
+    container_name: "prf-frontend"
+    build:
+      context: ./angular/PRF
+    ports:
+      - 4200:4200
+    depends_on:
+      - prf-backend
+
+  prf-backend:
+    container_name: "prf-backend"
+    build:
+      context: ./server
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongo
+
+  mongo:
+    container_name: "weatherMongo"
+    image: mongo
+    volumes:
+      - ./mongo:/data/db

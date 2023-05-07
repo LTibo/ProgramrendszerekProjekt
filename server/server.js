@@ -12,7 +12,7 @@ app.use(cors());
 app.use(cookieParser());
 
 mongoose
-  .connect("mongodb://localhost:27017/mydatabase", {
+  .connect("mongodb://mongo:27017/mydatabase", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -33,7 +33,8 @@ passport.use(
           user.comparePasswords(password, function (error, isMatch) {
             // Felhasználó által megadott jelszó ellenőrzése
             if (error) return done(error, false);
-            if (!isMatch) return done("Hibas jelszo", false, { message: "Hibas jelszo" });
+            if (!isMatch)
+              return done("Hibas jelszo", false, { message: "Hibas jelszo" });
             return done(null, user);
           });
           // ) {

@@ -22,6 +22,13 @@
     "cookie-parser": "^1.4.6",
     "express": "^4.18.2",
     "mongoose": "^7.0.3",
-    "parser": "^0.1.4"
+    "parser": "^0.1.4",
+    "bcrypt": "^5.1.0",
+    "bootstrap": "^5.2.3",
+    "cors": "^2.8.5",
+    "express-session": "^1.17.3",
+    "jsonwebtoken": "^9.0.0",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0"
   }
 }
