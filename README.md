@@ -2,13 +2,8 @@
 
 ## Indítás
 
-1. Gyökérmappában "npm install"
-2. .\server mappában "npm install"
-3. .\angular/PRF mappában "npm install"
-4. .\angular\PRF\src\app\environment.ts fájlba a WEATHER_API_KEY értékének a mellékelt API kulcs másolása (percenként 60 hívásos limit van rajta)
-5. .\server "docker run --name weatherMongo -p 27017:27017 -v ./mongo:/data/db -d mongo"
-6. .\server mappában "node .\server\server.js"
-7. .\angular/PRF mappában "ng serve" (vagy "npx ng serve" ha nincs globálisan installálva)
+1. .\angular\PRF\src\app\environment.ts fájlba a WEATHER_API_KEY értékének a mellékelt API kulcs másolása (percenként 60 hívásos limit van rajta)
+2. Gyökérmappában: "docker-compose up"
 
 Ezek után <http://localhost:4200> -on fog futni a frontend
 
